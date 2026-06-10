@@ -251,14 +251,14 @@ python3 -m pytest
 현재 확인한 테스트 결과는 다음과 같다.
 
 ```text
-5 passed in 2.67s
+6 passed in 1.43s
 ```
 
 테스트는 다음 내용을 확인한다.
 
 | 테스트 | 확인 내용 |
 |---|---|
-| `test_submit_flow.py` | 정상 제출, 검증, 복호화가 되는지 확인 |
+| `test_submit_flow.py` | TXT와 PDF 파일의 정상 제출, 검증, 복호화가 되는지 확인 |
 | `test_tamper_detection.py` | 제출 패키지를 변조하면 검증이 실패하는지 확인 |
 | `test_wrong_keys.py` | 다른 학생 키 또는 다른 교수 키를 쓰면 실패하는지 확인 |
 | `test_wsl_provider.py` | 실제 liboqs bridge 연동이 되는지 확인 |

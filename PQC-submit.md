@@ -573,26 +573,28 @@ open success: opened_demo_assignment.txt
 
 | 테스트 파일 | 확인 내용 |
 |---|---|
-| `test_submit_flow.py` | 정상 제출, 검증, 복호화 흐름 확인 |
+| `test_submit_flow.py` | TXT와 PDF 파일의 정상 제출, 검증, 복호화 흐름 확인 |
 | `test_tamper_detection.py` | 제출 패키지를 변조하면 검증이 실패하는지 확인 |
 | `test_wrong_keys.py` | 잘못된 학생 공개키 또는 교수 개인키 사용 시 실패 확인 |
 | `test_wsl_provider.py` | 실제 WSL bridge와 liboqs 연동 확인 |
 
 ### 11.1 정상 제출 테스트
 
-`test_submit_flow.py`는 다음을 확인한다.
+`test_submit_flow.py`는 TXT 파일과 PDF 파일을 모두 사용하여 다음을 확인한다.
 
 ```text
 교수 키 생성
 학생 키 생성
-과제 파일 생성
+TXT 과제 파일 생성
+PDF 과제 파일 생성
 .pqc 제출 패키지 생성
 학생 공개키로 제출물 검증
 교수 개인키로 복호화
 복호화 결과가 원본과 같은지 확인
 ```
 
-이 테스트가 통과하면 정상적인 제출 흐름이 동작한다는 뜻이다.
+이 테스트가 통과하면 단순 텍스트 파일뿐 아니라 일반적인 과제 제출 형식인 PDF 파일도
+암호화, 검증, 복호화 흐름에서 원본 바이트 그대로 보존된다는 뜻이다.
 
 ### 11.2 변조 탐지 테스트
 
@@ -651,22 +653,23 @@ python3 -m pytest
 현재 WSL 환경에서 테스트를 실행한 결과는 다음과 같다.
 
 ```text
-collected 5 items
+collected 6 items
 
-tests/test_submit_flow.py .                                              [ 20%]
-tests/test_tamper_detection.py .                                         [ 40%]
-tests/test_wrong_keys.py ..                                              [ 80%]
+tests/test_submit_flow.py ..                                             [ 33%]
+tests/test_tamper_detection.py .                                         [ 50%]
+tests/test_wrong_keys.py ..                                              [ 83%]
 tests/test_wsl_provider.py .                                             [100%]
 
-5 passed in 2.67s
+6 passed in 1.43s
 ```
 
-이는 현재 구현된 5개의 테스트가 모두 통과했다는 뜻이다.
+이는 현재 구현된 6개의 테스트가 모두 통과했다는 뜻이다.
 
 테스트 통과로 확인할 수 있는 내용은 다음과 같다.
 
 ```text
-정상 제출 가능
+TXT 파일 정상 제출 가능
+PDF 파일 정상 제출 가능
 제출물 검증 가능
 교수 개인키로 복호화 가능
 제출물 변조 탐지 가능
@@ -732,7 +735,7 @@ tests/test_wsl_provider.py .                                             [100%]
 
 프로젝트는 Python으로 제출 흐름을 구현하고, 실제 양자내성 암호 알고리즘은
 `vendor/liboqs-analysis`와 `bridge/oqs_bridge.c`를 통해 연결한다. 또한 자동 테스트를 통해
-정상 제출, 변조 탐지, 잘못된 키 사용 실패, 실제 liboqs 연동 여부를 확인한다.
+TXT/PDF 정상 제출, 변조 탐지, 잘못된 키 사용 실패, 실제 liboqs 연동 여부를 확인한다.
 
 따라서 본 프로젝트는 온라인 과제 제출 환경에서 필요한 기밀성, 무결성, 제출자 인증을
 양자내성 암호 기반으로 구현하고 검증한 교육용 및 실험용 보안 시스템이라고 할 수 있다.
