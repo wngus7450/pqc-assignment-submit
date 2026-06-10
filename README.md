@@ -311,6 +311,64 @@ opened PDF: .../examples/pdf_submission_test_output/opened_assignment.pdf
 이 스크립트가 생성하는 파일은 `examples/pdf_submission_test_output/`에 저장되며, 해당 폴더는
 Git에 올라가지 않도록 `.gitignore`에 등록되어 있다.
 
+### 8.3 테스트별 개별 실행 명령
+
+전체 테스트를 한 번에 실행하지 않고, 필요한 테스트만 골라서 실행할 수도 있다.
+
+먼저 프로젝트 폴더로 이동한다.
+
+```bash
+cd '/mnt/c/Users/wngus/Desktop/소프트웨어의 실제/양자내성 암호 기반 온라인 과제 제출 암호화 및 검증 시스템'
+```
+
+TXT 파일 제출, 검증, 복호화 테스트:
+
+```bash
+python3 -m pytest tests/test_submit_flow.py::test_submit_verify_open_flow -v
+```
+
+PDF 파일 제출, 검증, 복호화 테스트:
+
+```bash
+python3 -m pytest tests/test_submit_flow.py::test_pdf_submit_verify_open_flow -v
+```
+
+제출 패키지 변조 탐지 테스트:
+
+```bash
+python3 -m pytest tests/test_tamper_detection.py::test_tampered_package_fails_verification -v
+```
+
+다른 학생 공개키로 검증하면 실패하는지 확인하는 테스트:
+
+```bash
+python3 -m pytest tests/test_wrong_keys.py::test_wrong_student_key_fails_verification -v
+```
+
+다른 교수 개인키로 복호화하면 실패하는지 확인하는 테스트:
+
+```bash
+python3 -m pytest tests/test_wrong_keys.py::test_wrong_professor_key_fails_open -v
+```
+
+실제 liboqs와 WSL Provider 연동 테스트:
+
+```bash
+python3 -m pytest tests/test_wsl_provider.py::test_wsl_oqs_provider_submit_flow -v
+```
+
+전체 테스트를 한 번에 실행하는 명령:
+
+```bash
+python3 -m pytest -v
+```
+
+PDF 파일이 실제로 생성되는 직접 실행 테스트:
+
+```bash
+python3 examples/pdf_submission_test.py
+```
+
 ## 9. 상세 설명 문서
 
 과제 제출용 상세 설명은 `PQC-submit.md`에 작성되어 있다.
