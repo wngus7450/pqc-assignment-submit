@@ -1,0 +1,3 @@
+[submodule "vendor/liboqs-analysis"]
+	path = vendor/liboqs-analysis
+	url = https://github.com/wngus7450/liboqs-analysis.git

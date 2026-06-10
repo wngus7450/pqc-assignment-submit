@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pqc-submit"
+version = "0.1.0"
+description = "Post-quantum assignment submission encryption and verification CLI"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "wngus" }
+]
+dependencies = [
+  "cryptography>=42.0.0"
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8.0.0"
+]
+
+[project.scripts]
+pqc-submit = "pqc_submit.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pqc_submit"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

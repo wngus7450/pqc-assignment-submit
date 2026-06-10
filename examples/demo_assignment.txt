@@ -1,0 +1,4 @@
+This is a demo assignment file for pqc-submit.
+
+The DemoProvider is for workflow testing only. It is not a real post-quantum
+cryptographic implementation.
