@@ -142,7 +142,8 @@ KEM으로 AES 키 보호
 ├─ pyproject.toml
 ├─ Makefile
 ├─ examples/
-│  └─ demo_assignment.txt
+│  ├─ demo_assignment.txt
+│  └─ pdf_submission_test.py
 ├─ src/
 │  └─ pqc_submit/
 │     ├─ __init__.py
@@ -176,7 +177,7 @@ KEM으로 AES 키 보호
 | `PQC-submit.md` | 과제 제출용 상세 설명 문서 |
 | `pyproject.toml` | Python 패키지 설정 및 테스트 설정 |
 | `Makefile` | liboqs bridge 빌드 및 테스트 실행 명령 정의 |
-| `examples/` | 시연용 과제 파일 |
+| `examples/` | 시연용 과제 파일과 직접 실행 가능한 PDF 테스트 코드 |
 | `src/pqc_submit/` | 실제 Python 프로그램 코드 |
 | `bridge/` | Python과 C 기반 liboqs를 연결하는 bridge 코드 |
 | `tests/` | 기능 검증용 자동 테스트 |
@@ -634,6 +635,30 @@ vendor/liboqs-analysis
 
 단, `build/oqs_bridge`가 빌드되어 있지 않으면 이 테스트는 자동으로 건너뛴다.
 
+### 11.5 직접 실행용 PDF 테스트 코드
+
+자동 테스트와 별도로, 사용자가 직접 실행해볼 수 있는 PDF 테스트 코드도 제공한다.
+
+```text
+examples/pdf_submission_test.py
+```
+
+이 파일은 `pytest`를 사용하지 않고 일반 Python 스크립트처럼 실행할 수 있다.
+스크립트가 수행하는 과정은 다음과 같다.
+
+```text
+1. 테스트용 PDF 파일 생성
+2. 교수 KEM 공개키/개인키 생성
+3. 학생 전자서명 공개키/개인키 생성
+4. PDF 파일을 .pqc 제출 패키지로 생성
+5. 학생 공개키로 제출 패키지 검증
+6. 교수 개인키로 PDF 파일 복호화
+7. 원본 PDF와 복호화된 PDF가 완전히 같은지 비교
+```
+
+이 코드는 교수자가 프로젝트를 확인할 때 `pytest` 내부 구조를 보지 않더라도, PDF 파일 제출
+흐름이 실제로 동작하는지 직접 실행해볼 수 있도록 하기 위해 추가하였다.
+
 ## 12. 테스트 실행 방법과 결과
 
 프로젝트 루트에서 다음 명령을 실행한다.
@@ -660,7 +685,7 @@ tests/test_tamper_detection.py .                                         [ 50%]
 tests/test_wrong_keys.py ..                                              [ 83%]
 tests/test_wsl_provider.py .                                             [100%]
 
-6 passed in 1.43s
+6 passed in 0.62s
 ```
 
 이는 현재 구현된 6개의 테스트가 모두 통과했다는 뜻이다.
@@ -680,6 +705,30 @@ PDF 파일 정상 제출 가능
 
 단, 테스트 통과가 상용 수준의 완전한 보안성을 증명하는 것은 아니다.
 테스트는 본 프로젝트가 목표로 한 주요 기능이 기대한 방식대로 동작하는지 확인하는 수단이다.
+
+직접 실행용 PDF 테스트 코드는 다음 명령으로 실행한다.
+
+```bash
+python examples/pdf_submission_test.py
+```
+
+WSL 환경에서는 다음처럼 실행할 수 있다.
+
+```bash
+python3 examples/pdf_submission_test.py
+```
+
+정상적으로 실행되면 다음과 같은 결과가 출력된다.
+
+```text
+PDF submission test passed
+original PDF: .../examples/pdf_submission_test_output/assignment.pdf
+submission package: .../examples/pdf_submission_test_output/assignment.pdf.pqc
+opened PDF: .../examples/pdf_submission_test_output/opened_assignment.pdf
+```
+
+이 테스트에서 생성되는 파일은 `examples/pdf_submission_test_output/` 폴더에 저장된다.
+해당 폴더는 실행 결과물이므로 Git에 포함하지 않는다.
 
 ## 13. 프로젝트의 의의
 

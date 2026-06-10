@@ -12,3 +12,4 @@ build/
 *.pub
 *.sec
 opened_*
+examples/pdf_submission_test_output/

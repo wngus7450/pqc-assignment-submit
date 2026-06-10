@@ -82,7 +82,8 @@ DemoProvider 또는 WslOQSProvider
 ├─ pyproject.toml
 ├─ Makefile
 ├─ examples/
-│  └─ demo_assignment.txt
+│  ├─ demo_assignment.txt
+│  └─ pdf_submission_test.py
 ├─ src/
 │  └─ pqc_submit/
 │     ├─ cli.py
@@ -119,6 +120,7 @@ DemoProvider 또는 WslOQSProvider
 | `bridge/oqs_bridge.c` | Python과 C 기반 liboqs 사이의 연결 프로그램 |
 | `vendor/liboqs-analysis/` | 실제 양자내성 암호 구현이 포함된 외부 라이브러리 |
 | `tests/` | 프로젝트 기능 자동 검증 |
+| `examples/pdf_submission_test.py` | 사용자가 직접 실행할 수 있는 PDF 제출 테스트 코드 |
 
 ## 5. 사용 알고리즘
 
@@ -235,6 +237,8 @@ open success: opened_demo_assignment.txt
 
 ## 8. 테스트 실행 방법
 
+### 8.1 자동 테스트 실행
+
 프로젝트 루트에서 다음 명령을 실행한다.
 
 ```bash
@@ -251,7 +255,7 @@ python3 -m pytest
 현재 확인한 테스트 결과는 다음과 같다.
 
 ```text
-6 passed in 1.43s
+6 passed in 0.62s
 ```
 
 테스트는 다음 내용을 확인한다.
@@ -262,6 +266,50 @@ python3 -m pytest
 | `test_tamper_detection.py` | 제출 패키지를 변조하면 검증이 실패하는지 확인 |
 | `test_wrong_keys.py` | 다른 학생 키 또는 다른 교수 키를 쓰면 실패하는지 확인 |
 | `test_wsl_provider.py` | 실제 liboqs bridge 연동이 되는지 확인 |
+
+### 8.2 직접 실행 가능한 PDF 테스트 코드
+
+`pytest`와 별도로 사용자가 직접 실행할 수 있는 PDF 테스트 코드를 제공한다.
+
+```text
+examples/pdf_submission_test.py
+```
+
+이 코드는 테스트용 PDF 파일을 직접 생성한 뒤 다음 과정을 수행한다.
+
+```text
+1. 교수 KEM 키 생성
+2. 학생 전자서명 키 생성
+3. 테스트용 assignment.pdf 생성
+4. assignment.pdf.pqc 제출 패키지 생성
+5. 학생 공개키로 제출 패키지 검증
+6. 교수 개인키로 opened_assignment.pdf 복호화
+7. 원본 PDF와 복호화된 PDF가 같은지 비교
+```
+
+실행 명령은 다음과 같다.
+
+```bash
+python examples/pdf_submission_test.py
+```
+
+WSL 환경에서는 다음처럼 실행할 수 있다.
+
+```bash
+python3 examples/pdf_submission_test.py
+```
+
+정상 실행 결과는 다음과 같은 형태이다.
+
+```text
+PDF submission test passed
+original PDF: .../examples/pdf_submission_test_output/assignment.pdf
+submission package: .../examples/pdf_submission_test_output/assignment.pdf.pqc
+opened PDF: .../examples/pdf_submission_test_output/opened_assignment.pdf
+```
+
+이 스크립트가 생성하는 파일은 `examples/pdf_submission_test_output/`에 저장되며, 해당 폴더는
+Git에 올라가지 않도록 `.gitignore`에 등록되어 있다.
 
 ## 9. 상세 설명 문서
 
